@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Name — Physicist / Instrumentation &amp; Aerospace Systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E17;
+    --bg-panel:#0F1522;
+    --bg-panel-2:#131b2b;
+    --line:#212b3d;
+    --ink:#E9EEF6;
+    --ink-dim:#8FA0B8;
+    --ink-faint:#5B6A82;
+    --teal:#4FD1C5;
+    --violet:#A78BFA;
+    --amber:#E8A33D;
+    --radius:2px;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  a{color:var(--teal); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--teal); outline-offset:3px;}
+
+  /* ---------- starfield ---------- */
+  #starfield{
+    position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;
+  }
+  .aurora-glow{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 0%, rgba(167,139,250,0.16), transparent 60%),
+      radial-gradient(ellipse 55% 35% at 85% 10%, rgba(79,209,197,0.14), transparent 60%);
+  }
+
+  .wrap{max-width:900px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:10;
+    backdrop-filter:blur(10px);
+    background:rgba(10,14,23,0.75);
+    border-bottom:1px solid var(--line);
+  }
+  header.nav .wrap{display:flex; align-items:center; justify-content:space-between; padding-top:16px; padding-bottom:16px; max-width:900px;}
+  .brand{font-family:var(--mono); font-size:13px; letter-spacing:0.08em; color:var(--ink-dim);}
+  .brand strong{color:var(--ink); font-weight:500;}
+  nav.links{display:flex; gap:28px; font-family:var(--mono); font-size:13px;}
+  nav.links a{color:var(--ink-dim);}
+  nav.links a:hover{color:var(--teal); text-decoration:none;}
+
+  /* ---------- hero ---------- */
+  .hero{padding:88px 0 64px; position:relative;}
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--teal); margin-bottom:18px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:22px; height:1px; background:var(--teal); display:inline-block;}
+  h1{
+    font-family:var(--display); font-weight:600; font-size:clamp(38px,6vw,64px);
+    line-height:1.04; letter-spacing:-0.01em; margin-bottom:20px;
+  }
+  h1 .accent{color:var(--teal);}
+  .tagline{
+    font-family:var(--body); font-size:clamp(17px,2.1vw,20px); color:var(--ink-dim);
+    max-width:560px; margin-bottom:36px; font-weight:400;
+  }
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:64px;}
+  .btn{
+    font-family:var(--mono); font-size:13px; padding:11px 20px; border-radius:var(--radius);
+    border:1px solid var(--line); color:var(--ink); transition:border-color .15s, color .15s;
+    display:inline-block;
+  }
+  .btn:hover{border-color:var(--teal); color:var(--teal); text-decoration:none;}
+  .btn.primary{background:var(--teal); color:#08121a; border-color:var(--teal); font-weight:500;}
+  .btn.primary:hover{background:transparent; color:var(--teal);}
+
+  /* ---------- light curve signature ---------- */
+  .lightcurve-panel{
+    border:1px solid var(--line); background:var(--bg-panel); border-radius:var(--radius);
+    padding:28px 24px 20px;
+  }
+  .lightcurve-panel .lc-head{
+    display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;
+    font-family:var(--mono); font-size:11.5px; color:var(--ink-faint); letter-spacing:0.04em;
+  }
+  .lightcurve-panel .lc-head span.star-tag{color:var(--amber);}
+  svg.lc{width:100%; height:auto; display:block;}
+  .lc-path{
+    fill:none; stroke:var(--teal); stroke-width:2; stroke-linecap:round;
+    stroke-dasharray:900; stroke-dashoffset:900;
+    animation:draw 2.6s ease-out .3s forwards;
+  }
+  .lc-grid line{stroke:var(--line); stroke-width:1;}
+  .lc-dip-label{font-family:var(--mono); font-size:10.5px; fill:var(--ink-faint);}
+  .lc-axis-label{font-family:var(--mono); font-size:10px; fill:var(--ink-faint);}
+  .lc-marker{fill:var(--amber);}
+  @keyframes draw{ to{stroke-dashoffset:0;} }
+  @media (prefers-reduced-motion:reduce){
+    .lc-path{animation:none; stroke-dashoffset:0;}
+  }
+
+  /* ---------- section shell ---------- */
+  section{padding:72px 0; border-top:1px solid var(--line); position:relative;}
+  .section-head{margin-bottom:36px;}
+  h2{
+    font-family:var(--display); font-weight:600; font-size:clamp(26px,3.4vw,34px);
+    letter-spacing:-0.005em;
+  }
+  .lede{color:var(--ink-dim); max-width:640px; margin-top:12px; font-size:16px;}
+
+  /* ---------- about ---------- */
+  .about-body{max-width:640px; color:var(--ink-dim); font-size:16.5px;}
+  .about-body strong{color:var(--ink); font-weight:500;}
+
+  /* ---------- project ---------- */
+  .project-meta{
+    display:flex; gap:24px; flex-wrap:wrap; font-family:var(--mono); font-size:12.5px;
+    color:var(--ink-faint); margin-top:14px; margin-bottom:8px;
+  }
+  .project-meta span{color:var(--ink-dim);}
+
+  .grid-4{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line);
+    border:1px solid var(--line); margin:40px 0; border-radius:var(--radius); overflow:hidden;
+  }
+  @media (max-width:760px){ .grid-4{grid-template-columns:1fr;} }
+  .grid-4 .cell{background:var(--bg-panel); padding:22px 20px;}
+  .grid-4 .cell .k{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--violet); margin-bottom:10px;
+  }
+  .grid-4 .cell p{font-size:14.5px; color:var(--ink-dim);}
+
+  .diagram-block{
+    border:1px solid var(--line); background:var(--bg-panel); border-radius:var(--radius);
+    padding:26px 24px; margin:28px 0;
+  }
+  .diagram-block .cap{
+    font-family:var(--mono); font-size:12px; color:var(--ink-faint); margin-top:14px; line-height:1.6;
+  }
+  .diagram-block .cap strong{color:var(--ink-dim); font-weight:500;}
+  svg.window{width:100%; height:auto; display:block;}
+  .win-band{fill:var(--violet); opacity:0.18;}
+  .win-axis{stroke:var(--line); stroke-width:1;}
+  .win-label{font-family:var(--mono); font-size:10.5px; fill:var(--ink-faint);}
+  .win-optimal{fill:var(--amber);}
+  .win-optimal-label{font-family:var(--mono); font-size:10.5px; fill:var(--amber); font-weight:500;}
+
+  .readout{
+    font-family:var(--mono); font-size:13.5px; color:var(--teal);
+    background:var(--bg-panel-2); border:1px solid var(--line); border-left:2px solid var(--teal);
+    padding:18px 20px; margin:32px 0; line-height:1.75;
+  }
+  .readout .prompt{color:var(--ink-faint);}
+
+  .chip-row{display:flex; flex-wrap:wrap; gap:9px; margin-top:24px;}
+  .chip{
+    font-family:var(--mono); font-size:12px; padding:7px 13px; border:1px solid var(--line);
+    border-radius:20px; color:var(--ink-dim);
+  }
+
+  /* ---------- skills ---------- */
+  .skills-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:28px 40px;}
+  @media (max-width:640px){ .skills-grid{grid-template-columns:1fr;} }
+  .skill-cat h3{
+    font-family:var(--display); font-size:17px; font-weight:600; margin-bottom:10px; color:var(--ink);
+  }
+  .skill-cat p{color:var(--ink-dim); font-size:14.5px;}
+
+  /* ---------- contact / footer ---------- */
+  footer{padding:64px 0 48px; border-top:1px solid var(--line);}
+  footer .foot-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:32px;}
+  footer h2{margin-bottom:14px;}
+  .contact-links{display:flex; flex-direction:column; gap:8px; font-family:var(--mono); font-size:14px;}
+  .foot-note{
+    margin-top:56px; padding-top:24px; border-top:1px solid var(--line);
+    font-family:var(--mono); font-size:11.5px; color:var(--ink-faint);
+  }
+
+  .edit-flag{
+    display:inline-block; font-family:var(--mono); font-size:10.5px; color:var(--bg);
+    background:var(--amber); padding:1px 6px; border-radius:3px; margin-left:8px; vertical-align:middle;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="aurora-glow"></div>
+
+<header class="nav">
+  <div class="wrap">
+    <div class="brand">YOUR_NAME<strong>.portfolio</strong></div>
+    <nav class="links">
+      <a href="#about">About</a>
+      <a href="#project">Project</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none;">
+    <div class="eyebrow">Physicist &middot; Instrumentation &amp; Test</div>
+    <h1>Your Name<span class="accent">.</span></h1>
+    <p class="tagline">I test, calibrate, and fly scientific instruments. Background in physics with
+      hands-on experience on a NASA sounding rocket mission — from optical calibration to
+      contingency pointing systems to orbital geometry modeling in Python.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#project">View flagship project</a>
+      <a class="btn" href="#contact">Resume &amp; contact</a>
+    </div>
+
+    <div class="lightcurve-panel">
+      <div class="lc-head">
+        <span>OCCULTATION LIGHT CURVE &mdash; <span class="star-tag">ALGENIB (γ-PEGASI)</span> · 215nm</span>
+        <span>PolarNOx / Jan 2026</span>
+      </div>
+      <svg class="lc" viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Diagram of starlight intensity dipping as nitric oxide occults the reference star, then recovering">
+        <g class="lc-grid">
+          <line x1="0" y1="55" x2="800" y2="55"/>
+          <line x1="0" y1="110" x2="800" y2="110"/>
+          <line x1="0" y1="165" x2="800" y2="165"/>
+        </g>
+        <text x="8" y="46" class="lc-axis-label">star intensity</text>
+        <text x="700" y="212" class="lc-axis-label">time →</text>
+        <path class="lc-path" d="M 20 60 C 160 58, 220 60, 280 90 C 340 130, 360 175, 420 178 C 480 178, 520 140, 560 95 C 620 55, 680 52, 780 50"/>
+        <line x1="420" y1="178" x2="420" y2="200" stroke="#5B6A82" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="330" y="200" class="lc-dip-label">NO absorption layer</text>
+        <circle class="lc-marker" cx="420" cy="178" r="4"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-head">
+      <div class="eyebrow">01 · About</div>
+      <h2>Physics grounded in hardware.</h2>
+    </div>
+    <p class="about-body">
+      I'm a physicist with a focus on <strong>instrumentation, optical calibration, and mission data
+      analysis</strong> &mdash; skills built through direct work on a NASA sounding rocket payload, from
+      the optics bench to launch day at Poker Flat Research Range, Alaska. I'm drawn to problems where
+      the physics has to survive contact with real hardware: vacuum chambers, cold-weather field ops,
+      and systems that need a backup plan when the primary one fails.
+      <span class="edit-flag">EDIT ME</span>
+    </p>
+  </section>
+
+  <!-- PROJECT -->
+  <section id="project">
+    <div class="section-head">
+      <div class="eyebrow">02 · Flagship Project</div>
+      <h2>PolarNOx — NASA Sounding Rocket Mission</h2>
+      <p class="lede">A NASA-funded Virginia Tech mission measuring nitric oxide buildup in the polar
+        night upper atmosphere, using a UV spectrograph to track starlight dimming as the rocket's
+        line of sight passed through the NO layer.</p>
+      <div class="project-meta">
+        <div>ROLE &nbsp;<span>Instrumentation, Calibration &amp; Data Analysis</span></div>
+        <div>SITE &nbsp;<span>Poker Flat Research Range, AK</span></div>
+        <div>LAUNCH &nbsp;<span>Jan 30, 2026 · 04:20 AKST</span></div>
+      </div>
+    </div>
+
+    <div class="grid-4">
+      <div class="cell">
+        <div class="k">Problem</div>
+        <p>The mission's spectrograph relied on an automated star tracker to hold a reference star in
+          view. A tracker failure mid-flight would end the science &mdash; the payload needed a manual
+          backup, and the team needed to know exactly when to launch.</p>
+      </div>
+      <div class="cell">
+        <div class="k">Approach</div>
+        <p>Calibrated the spectrograph and telescope pre-flight; built a manual backup aiming system
+          using directional (up/down/left/right) commands to re-center the star; wrote a Python model
+          of moon-star-rocket geometry to find the best launch window.</p>
+      </div>
+      <div class="cell">
+        <div class="k">Tools</div>
+        <p>Python, Astropy, optical instrumentation &amp; calibration procedures, manual telescope
+          pointing/control, celestial geometry modeling.</p>
+      </div>
+      <div class="cell">
+        <div class="k">Result</div>
+        <p>Successful launch on Jan 30, 2026. The spectrograph tracked the target star cleanly
+          throughout flight and returned a full NO altitude density profile now under analysis.</p>
+      </div>
+    </div>
+
+    <div class="diagram-block">
+      <div class="lc-head" style="margin-bottom:14px;">
+        <span>LAUNCH WINDOW OPTIMIZATION</span>
+        <span>Python / Astropy geometry model</span>
+      </div>
+      <svg class="window" viewBox="0 0 800 130" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Timeline from January 17 to February 8 highlighting two candidate launch windows with optimal dates January 19 and January 30 marked">
+        <line x1="20" y1="70" x2="780" y2="70" class="win-axis"/>
+        <rect x="55" y="50" width="140" height="40" class="win-band"/>
+        <rect x="360" y="50" width="215" height="40" class="win-band"/>
+        <text x="55" y="42" class="win-label">JAN 17</text>
+        <text x="175" y="42" class="win-label">JAN 21</text>
+        <text x="360" y="42" class="win-label">JAN 26</text>
+        <text x="555" y="42" class="win-label">FEB 1</text>
+        <text x="745" y="42" class="win-label">FEB 8</text>
+        <circle class="win-optimal" cx="100" cy="70" r="5"/>
+        <text x="82" y="102" class="win-optimal-label">JAN 19</text>
+        <circle class="win-optimal" cx="470" cy="70" r="5"/>
+        <text x="452" y="102" class="win-optimal-label">JAN 30 ★</text>
+      </svg>
+      <p class="cap"><strong>Two candidate windows</strong> (Jan 17&ndash;21 and Jan 26&ndash;Feb 1)
+        were identified where the moon&ndash;star&ndash;rocket angle stayed above 90°, minimizing
+        stray-light contamination during peak nitric oxide abundance. Jan 30 was selected as the
+        launch date; the mission flew that morning.</p>
+    </div>
+
+    <div class="readout">
+      <span class="prompt">$</span> resume --bullet<br>
+      Calibrated spectrograph/telescope instrumentation and built a manual backup pointing system for
+      a NASA sounding rocket payload; developed a Python-based launch-window optimization model using
+      stellar occultation geometry &mdash; contributed to a successful January 2026 launch from Poker
+      Flat Research Range, AK.
+    </div>
+
+    <div class="chip-row">
+      <span class="chip">Python</span>
+      <span class="chip">Astropy</span>
+      <span class="chip">Optical Calibration</span>
+      <span class="chip">Telescope Pointing</span>
+      <span class="chip">Redundant Systems Design</span>
+      <span class="chip">Celestial Geometry</span>
+      <span class="chip">Field Ops (-50°F)</span>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-head">
+      <div class="eyebrow">03 · Skills</div>
+      <h2>What I bring to a systems team.</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-cat">
+        <h3>Instrumentation &amp; Optics</h3>
+        <p>Spectrograph and telescope calibration, optical alignment, contingency/backup system
+          design, vacuum and cold-environment testing.</p>
+      </div>
+      <div class="skill-cat">
+        <h3>Programming &amp; Analysis</h3>
+        <p>Python, Astropy, numerical modeling, data analysis and visualization for mission-critical
+          decisions.</p>
+      </div>
+      <div class="skill-cat">
+        <h3>Mission Operations</h3>
+        <p>Launch campaign support, real-time manual instrument control, field operations in
+          extreme conditions.</p>
+      </div>
+      <div class="skill-cat">
+        <h3>Systems Thinking</h3>
+        <p>Physics-first problem solving, redundancy planning, translating scientific requirements
+          into engineering constraints.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <footer id="contact">
+    <div class="foot-grid">
+      <div>
+        <div class="eyebrow">04 · Contact</div>
+        <h2>Let's talk.</h2>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:your.email@example.com">your.email@example.com <span class="edit-flag">EDIT</span></a>
+        <a href="#">linkedin.com/in/your-name <span class="edit-flag">EDIT</span></a>
+        <a href="#">github.com/your-username <span class="edit-flag">EDIT</span></a>
+        <a href="#">Download résumé (PDF) <span class="edit-flag">EDIT</span></a>
+      </div>
+    </div>
+    <div class="foot-note">
+      Built as a starting template &mdash; replace YOUR_NAME, bio, and contact links above, then add
+      further projects to the grid as you build them out.
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  // subtle twinkling starfield, respects reduced-motion
+  (function(){
+    var canvas = document.getElementById('starfield');
+    var ctx = canvas.getContext('2d');
+    var stars = [];
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function resize(){
+      canvas.width = window.innerWidth;
+      canvas.height = document.documentElement.scrollHeight;
+    }
+    function makeStars(){
+      stars = [];
+      var count = Math.floor((canvas.width * canvas.height) / 9000);
+      for(var i=0;i<count;i++){
+        stars.push({
+          x: Math.random()*canvas.width,
+          y: Math.random()*canvas.height,
+          r: Math.random()*1.2 + 0.3,
+          phase: Math.random()*Math.PI*2,
+          speed: 0.008 + Math.random()*0.015
+        });
+      }
+    }
+    function draw(t){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for(var i=0;i<stars.length;i++){
+        var s = stars[i];
+        var alpha = reduced ? 0.55 : (0.35 + 0.45*Math.abs(Math.sin(s.phase + t*s.speed)));
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(233,238,246,' + alpha.toFixed(2) + ')';
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.fill();
+      }
+      if(!reduced){ requestAnimationFrame(draw); }
+    }
+    window.addEventListener('resize', function(){ resize(); makeStars(); });
+    resize(); makeStars();
+    if(reduced){ draw(0); } else { requestAnimationFrame(draw); }
+  })();
+</script>
+
+</body>
+</html>
