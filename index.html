@@ -246,23 +246,12 @@
 
     <div class="lightcurve-panel">
       <div class="lc-head">
-        <span>OCCULTATION LIGHT CURVE &mdash; <span class="star-tag">ALGENIB (γ-PEGASI)</span> · 215nm</span>
-        <span>PolarNOx / Jan 2026</span>
+        <span>APOGEE GEOMETRY &mdash; EARTH · <span class="star-tag">STAR</span> · MOON · SUN</span>
+        <span>PolarNOx / 2026-01-30 13:25 UTC</span>
       </div>
-      <svg class="lc" viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" role="img"
-           aria-label="Diagram of starlight intensity dipping as nitric oxide occults the reference star, then recovering">
-        <g class="lc-grid">
-          <line x1="0" y1="55" x2="800" y2="55"/>
-          <line x1="0" y1="110" x2="800" y2="110"/>
-          <line x1="0" y1="165" x2="800" y2="165"/>
-        </g>
-        <text x="8" y="46" class="lc-axis-label">star intensity</text>
-        <text x="700" y="212" class="lc-axis-label">time →</text>
-        <path class="lc-path" d="M 20 60 C 160 58, 220 60, 280 90 C 340 130, 360 175, 420 178 C 480 178, 520 140, 560 95 C 620 55, 680 52, 780 50"/>
-        <line x1="420" y1="178" x2="420" y2="200" stroke="#5B6A82" stroke-width="1" stroke-dasharray="3,3"/>
-        <text x="330" y="200" class="lc-dip-label">NO absorption layer</text>
-        <circle class="lc-marker" cx="420" cy="178" r="4"/>
-      </svg>
+      <div style="background:#fff; border-radius:2px; padding:10px; margin-top:4px;">
+        <img src="orbital-geometry.png" alt="2D projection (Y vs Z) at rocket apogee on 2026-01-30 showing Earth, rocket apogee, reference star, Moon, and Sun positions used to determine the launch window" style="width:100%; height:auto; display:block;">
+      </div>
     </div>
   </section>
 
@@ -313,7 +302,7 @@
       </div>
       <div class="cell">
         <div class="k">Tools</div>
-        <p>Python, Astropy, CAD, optical instrumentation &amp; calibration procedures, manual
+        <p>Python, Astropy, Altium, CAD, optical instrumentation &amp; calibration procedures, manual
           telescope pointing/control, celestial geometry modeling.</p>
       </div>
       <div class="cell">
@@ -352,7 +341,7 @@
     <div class="cred-grid">
       <div class="cell">
         <div class="k">Hardware fabrication</div>
-        <p>Designed and machined an aperture casing for the in-lab spectrograph using CAD
+        <p>Designed and machined an aperture casing for the in-lab spectrograph using Altium and CAD
           in the aerospace machine shop, producing stable, light-tight conditions for bench testing.</p>
       </div>
       <div class="cell">
@@ -375,6 +364,7 @@
     <div class="chip-row">
       <span class="chip">Python</span>
       <span class="chip">Astropy</span>
+      <span class="chip">Altium</span>
       <span class="chip">CAD</span>
       <span class="chip">Optical Calibration</span>
       <span class="chip">Telescope Pointing</span>
@@ -412,7 +402,7 @@
       <div class="skill-cat">
         <h3>Instrumentation &amp; Optics</h3>
         <p>Spectrograph and telescope calibration, optical alignment, aperture casing design/fabrication
-          (CAD), contingency/backup system design, vacuum and cold-environment testing.</p>
+          (Altium, CAD), contingency/backup system design, vacuum and cold-environment testing.</p>
       </div>
       <div class="skill-cat">
         <h3>Programming &amp; Analysis</h3>
